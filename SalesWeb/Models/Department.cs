@@ -1,6 +1,6 @@
 
 
-namespace SalesWeb.Controllers {
+namespace SalesWeb.Models {
     //Classe Departamento
     public class Department {
         //Atributos da classe
@@ -8,6 +8,5 @@ namespace SalesWeb.Controllers {
         public string Name { get; set; }
 
 
-        public void addSeller
     }
 }
