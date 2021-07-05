@@ -31,8 +31,10 @@ namespace SalesWeb {
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
+            //Conexão com banco de dados, configuração com aquivo => data/SalesWebContext.cs
     services.AddDbContext<SalesWebContext>(options =>
-            options.UseSqlServer(Configuration.GetConnectionString("SalesWebContext")));
+            options.UseMySql(Configuration.GetConnectionString("SalesWebContext"), builder =>
+                builder.MigrationsAssembly("SalesWeb")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
