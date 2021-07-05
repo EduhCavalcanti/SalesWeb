@@ -50,7 +50,7 @@ namespace SalesWeb.Models
         public double TotalSales(DateTime initial, DateTime final)
         {
             //Filtrando lista de venda pelo tempo e somando com o montante (amount)| sr = SaleRecord
-            return Sales.Where(sr => sr.Date >= initial && sr.Date <= final).Sum(sr => sr.Amount); //Somando com o montante(amount)
+            return Sales.Where(sr => sr.Date >= initial && sr.Date <= final).Sum(sr => sr.Amount); //Somando com o montante 
         }
     }
 }
