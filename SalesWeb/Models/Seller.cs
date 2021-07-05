@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq; //para usar where
 
 //Classe vendedor 
 namespace SalesWeb.Models
@@ -33,8 +34,23 @@ namespace SalesWeb.Models
             this.Department = department;
         }
 
+        //Método para adicionar uma venda a lista de vendas (Sales<SalesRecord>)
+        public void AddSales(SalesRecord sr)
+        {
+            Sales.Add(sr);
+        }
 
+        //Método para remover uma venda a lista de vendas
+        public void RemoveSales(SalesRecord sr)
+        {
+            Sales.Remove(sr);
+        }
 
-
+        //Método para retornar o total de venda em um período de tempo
+        public double TotalSales(DateTime initial, DateTime final)
+        {
+            //Filtrando lista de venda pelo tempo e somando com o montante (amount)| sr = SaleRecord
+            return Sales.Where(sr => sr.Date >= initial && sr.Date <= final).Sum(sr => sr.Amount); //Somando com o montante 
+        }
     }
 }

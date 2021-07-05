@@ -1,3 +1,5 @@
+using System;
+using System.Linq;
 using System.Collections.Generic;
 
 namespace SalesWeb.Models {
@@ -17,6 +19,19 @@ namespace SalesWeb.Models {
         public Department(int id, string name) {
             this.Id = id;
             this.Name = name;
+        }
+
+        //Método para adicionar um vendedor
+        public void AddSeller(Seller seller)
+        {
+            Sellers.Add(seller);
+        }
+
+        //Método para retornar total de vendas do Departamento em um período de tempo
+        public double TotalSales(DateTime initial, DateTime final)
+        {
+            //Reaproveitando método da classe Seller para somar todos os vendedores no periodo de tempo da classe departamento
+            return Sellers.Sum(seller => seller.TotalSales(initial, final)); //TotalSales é um método para somar em periodo de tempo
         }
     
     }
