@@ -32,15 +32,20 @@ namespace SalesWeb {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             //Conexão com banco de dados, configuração com aquivo => data/SalesWebContext.cs
-    services.AddDbContext<SalesWebContext>(options =>
+        services.AddDbContext<SalesWebContext>(options =>
             options.UseMySql(Configuration.GetConnectionString("SalesWebContext"), builder =>
                 builder.MigrationsAssembly("SalesWeb")));
+
+            //Registrando serviço para usar o Seeding Service, para popular o banco de dados
+            services.AddScoped<SeedingService>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env) {
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, SeedingService seedingService) {
             if (env.IsDevelopment()) {
                 app.UseDeveloperExceptionPage();
+                seedingService.Seed();
             }
             else {
                 app.UseExceptionHandler("/Home/Error");

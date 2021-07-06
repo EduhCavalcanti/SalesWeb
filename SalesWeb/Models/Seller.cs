@@ -12,6 +12,7 @@ namespace SalesWeb.Models
         public string Email { get; set; }
         public DateTime BirthDate { get; set; }
         public double BaseSalary { get; set; }
+
         //Fazendo associação de vendedores(Saller) possui 1 Departament(Departments)
         public Department Department { get; set; }
         //Fazendo associação de 1 vendedor(Seller) para varias vendas(SalesRecord)

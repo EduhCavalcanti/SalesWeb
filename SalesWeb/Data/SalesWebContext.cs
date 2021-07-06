@@ -15,7 +15,7 @@ namespace SalesWeb.Data
         }
 
         public DbSet<SalesWeb.Models.Department> Department { get; set; }
-        public DbSet<SalesWeb.Models.SalesRecord> SalesRecord { get; set; }
-        public DbSet<SalesWeb.Models.Seller> Seller { get; set; }
+        public DbSet<SalesWeb.Models.SalesRecord> SalesRecord { get; set; } //Implantação para criação da tabela no Banco de dados com Migration
+        public DbSet<SalesWeb.Models.Seller> Seller { get; set; } //Implantação para criação da tabela no Banco de dados com Migration
     }
 }
