@@ -11,6 +11,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using SalesWeb.Data;
+using SalesWeb.Services;
 
 namespace SalesWeb {
     public class Startup {
@@ -36,8 +37,10 @@ namespace SalesWeb {
             options.UseMySql(Configuration.GetConnectionString("SalesWebContext"), builder =>
                 builder.MigrationsAssembly("SalesWeb")));
 
+            //Usado para injeção de dependência 
             //Registrando serviço para usar o Seeding Service, para popular o banco de dados
             services.AddScoped<SeedingService>();
+            services.AddScoped<SellerService>();
 
         }
 

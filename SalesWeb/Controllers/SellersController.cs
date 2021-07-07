@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SalesWeb.Data;
 using SalesWeb.Models;
+using SalesWeb.Services;
 
 namespace SalesWeb.Controllers
 {
@@ -15,12 +16,39 @@ namespace SalesWeb.Controllers
         //Criado atributo para utilizar a dependencia Context com baco de dados 
         private readonly SalesWebContext _context;
 
-        //Criado construtor para injetar a dependência 
-        public SellersController(SalesWebContext context)
+        //Dependencia para acessar o SellerService 
+        private SellerService _sellerService;
+
+        //Criado construtor para injetar as dependências 
+        public SellersController(SalesWebContext context, SellerService sellerService)
         {
             _context = context;
+            _sellerService = sellerService;
         }
 
+        //Método Index que vai chamar a operação FindAll da pasta Services
+        public IActionResult Index()
+        {
+            //Vai retornar uma lista de Seller
+            var lista = _sellerService.FindAll();
+            return View(lista);//Vai retornar o resultado da lista pela view no Html
+        }
+
+
+
+
+
+
+
+
+
+    }
+
+        /*CONTROLLER GERADO AUTOMATICAMENTE PELO VISUAL STUDIO POR MEIO DO MVC
+         * IREI FAZER O CONTROLLER MANUAL CONFORME FOI PEDIDO NA AULA 
+         * 
+         * 
+         * 
         // GET: Sellers
         public async Task<IActionResult> Index()
         {
@@ -151,5 +179,6 @@ namespace SalesWeb.Controllers
         {
             return _context.Seller.Any(e => e.Id == id);
         }
-    }
+        */
+    
 }
