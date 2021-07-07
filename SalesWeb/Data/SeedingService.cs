@@ -54,7 +54,6 @@ namespace SalesWeb.Data
                 _context.Seller.AddRange(s1, s2, s3, s4, s5);
                 _context.SalesRecord.AddRange(a1, a2, a3, a4, a5, a6, a7);
 
-                //Para salvar as operações acima no banco de dados
                 //Vai salvar e confirmar as alterações no banco de dados
                 _context.SaveChanges(); 
             }

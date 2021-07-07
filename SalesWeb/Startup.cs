@@ -43,9 +43,10 @@ namespace SalesWeb {
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, SeedingService seedingService) {
+            //Se tiver no perfil de desenvolvimento vai rodar 
             if (env.IsDevelopment()) {
                 app.UseDeveloperExceptionPage();
-                seedingService.Seed();
+                seedingService.Seed(); //Se estiver em modo desenvolvimento vai executar o método para popular o banco de dados
             }
             else {
                 app.UseExceptionHandler("/Home/Error");
