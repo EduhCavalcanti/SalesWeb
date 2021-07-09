@@ -24,5 +24,13 @@ namespace SalesWeb.Services
             //Vai acessar a fonte de dados relacionado a tabela de vendedores
             return _context.Seller.ToList();//E vai converter para uma lista => ToString
         }
+
+        //Método que vai inserir um novo vendedor no banco de dados
+        public void Insert (Seller obj)
+        {
+            //Vai inserir esse obj no banco de dados
+            _context.Add(obj);
+            _context.SaveChanges();//Para confirmar a criação no banco de dados
+        }
     }
 }
