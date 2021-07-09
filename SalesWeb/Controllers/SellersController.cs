@@ -48,6 +48,13 @@ namespace SalesWeb.Controllers
             return RedirectToAction(nameof(Index)); //Vai redirecionar para a página Index quando for criado
         }
 
+        //Método TESTE de remoção de vendedor
+        [HttpDelete]//Método Delete para remoção
+        public IActionResult Delete(Seller seller)
+        {
+            _sellerService.Remove(seller);
+            return RedirectToAction(nameof(Index));
+        }
 
 
 

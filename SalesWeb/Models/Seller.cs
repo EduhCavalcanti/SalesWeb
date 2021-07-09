@@ -15,6 +15,8 @@ namespace SalesWeb.Models
 
         //Fazendo associação de vendedores(Saller) possui 1 Departament(Departments)
         public Department Department { get; set; }
+        //Criando propriedade id do departamento || // Não pode ser null, entity framework não permite ficar null
+        public int DepartmentId { get; set; } 
         //Fazendo associação de 1 vendedor(Seller) para varias vendas(SalesRecord)
         public ICollection<SalesRecord> Sales { get; set; } = new List<SalesRecord>(); //Instanciando lista com coleção de vendas
 

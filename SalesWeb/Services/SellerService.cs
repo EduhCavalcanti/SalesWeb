@@ -29,8 +29,22 @@ namespace SalesWeb.Services
         public void Insert (Seller obj)
         {
             //Vai inserir esse obj no banco de dados
+            obj.Department = _context.Department.First();//(Provisório) Vai pegar o primeiro departamento para incluir no DepartmentId
             _context.Add(obj);
             _context.SaveChanges();//Para confirmar a criação no banco de dados
+        }
+
+        //Método que vai procurar por id
+        public Seller FindById(int id)
+        {
+            return _context.Seller.FirstOrDefault(obj => obj.Id == id);
+        }
+
+        //Método para remover o vendendor 
+        public void Remove(Seller obj)
+        {
+            _context.Remove(obj);
+            _context.SaveChanges();
         }
     }
 }
