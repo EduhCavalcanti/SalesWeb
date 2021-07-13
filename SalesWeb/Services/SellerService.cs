@@ -22,14 +22,14 @@ namespace SalesWeb.Services
         public List<Seller> FindAll()
         {
             //Vai acessar a fonte de dados relacionado a tabela de vendedores
-            return _context.Seller.ToList();//E vai converter para uma lista => ToString
+            return _context.Seller.ToList();//E vai converter para uma lista => ToList()
         }
 
         //Método que vai inserir um novo vendedor no banco de dados
         public void Insert (Seller obj)
         {
             //Vai inserir esse obj no banco de dados
-            obj.Department = _context.Department.First();//(Provisório) Vai pegar o primeiro departamento para incluir no DepartmentId
+            //obj.Department = _context.Department.First();//(Provisório) Vai pegar o primeiro departamento para incluir no DepartmentId
             _context.Add(obj);
             _context.SaveChanges();//Para confirmar a criação no banco de dados
         }

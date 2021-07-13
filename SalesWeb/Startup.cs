@@ -41,6 +41,7 @@ namespace SalesWeb {
             //Registrando serviço para usar o Seeding Service, para popular o banco de dados
             services.AddScoped<SeedingService>();
             services.AddScoped<SellerService>();
+            services.AddScoped<DepartmentService>();
 
         }
 

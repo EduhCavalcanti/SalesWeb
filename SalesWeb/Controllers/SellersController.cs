@@ -7,23 +7,23 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SalesWeb.Data;
 using SalesWeb.Models;
+using SalesWeb.Models.ViewModels;
 using SalesWeb.Services;
 
 namespace SalesWeb.Controllers
 {
     public class SellersController : Controller
     {
-        //Criado atributo para utilizar a dependencia Context com baco de dados 
-        private readonly SalesWebContext _context;
-
+       
         //Dependencia para acessar o SellerService 
-        private SellerService _sellerService;
+        private readonly SellerService _sellerService;
+        private readonly DepartmentService _departmentService;
 
         //Criado construtor para injetar as dependências 
-        public SellersController(SalesWebContext context, SellerService sellerService)
+        public SellersController(SellerService sellerService, DepartmentService departmentService)
         {
-            _context = context;
             _sellerService = sellerService;
+            _departmentService = departmentService;
         }
 
         //Método Index que vai chamar a operação FindAll da pasta Services
@@ -34,8 +34,13 @@ namespace SalesWeb.Controllers
             return View(lista);//Vai retornar o resultado da lista pela view no Html
         }
         
+        //Método que vai abri o formulário pra cadastrar o vendedor
         public IActionResult Create() {
-            return View();
+            //Vai buscar do banco de dados todos os departamentos
+            var departaments = _departmentService.FindAll();
+            //Vai instanciar o obj do viewModel
+            var viewModel = new SellerFormViewModel { Departments = departaments };//Já vai iniciar com a lista de departamentos    
+            return View(viewModel);//Vai receber a viewModel
         }
 
         [HttpPost]//Método POST para criar 
