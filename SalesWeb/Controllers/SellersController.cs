@@ -53,11 +53,32 @@ namespace SalesWeb.Controllers
             return RedirectToAction(nameof(Index)); //Vai redirecionar para a página Index quando for criado
         }
 
-        //Método TESTE de remoção de vendedor
-        [HttpDelete]//Método Delete para remoção
-        public IActionResult Delete(Seller seller)
+        //Método de confirmação do Delete no front
+        public IActionResult Delete(int? id)//Vai receber um parâmetro opcional 
         {
-            _sellerService.Remove(seller);
+            //Primeiro vai verificar se o id é null
+            if(id == null)
+            {
+                return NotFound();
+            }
+            //Vai buscar o seller no bannco de dados de acordo com id que foi fornecido
+            var obj = _sellerService.FindById(id.Value);//Tem que colocar o "Value" pq ele é um nullable
+
+            //Pode retornar null, se for null
+            if(obj == null)
+            {
+                return NotFound();
+            }
+            //Se não for null vai passar um view passando o obj como argumeto
+            return View(obj);
+        }
+
+        //Método para delete do seller de fato
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult delete(int id)
+        {
+            _sellerService.Remove(id);
             return RedirectToAction(nameof(Index));
         }
 

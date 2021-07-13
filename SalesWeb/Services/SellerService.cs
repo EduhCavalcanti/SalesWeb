@@ -37,13 +37,18 @@ namespace SalesWeb.Services
         //Método que vai procurar por id
         public Seller FindById(int id)
         {
+            // Se tiver um id válido vai retornar o Id do Seller
             return _context.Seller.FirstOrDefault(obj => obj.Id == id);
         }
 
         //Método para remover o vendendor 
-        public void Remove(Seller obj)
+        public void Remove(int id)//Vai receber um id para remover o seller correto
         {
-            _context.Remove(obj);
+            //Vai pegar o obj(Seller) de acordo com com parametro 
+            var obj = _context.Seller.Find(id);
+            //Com obj na mão,vamos remover o seller pelo id que foi informado no parâmetro acima
+            _context.Seller.Remove(obj);
+            //Para confirmar a remoção no banco de dados
             _context.SaveChanges();
         }
     }
