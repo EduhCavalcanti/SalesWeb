@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using SalesWeb.Data;
 using SalesWeb.Models;
 using Microsoft.EntityFrameworkCore;
+using SalesWeb.Services.Exception;
 
 namespace SalesWeb.Services
 {
@@ -52,6 +53,28 @@ namespace SalesWeb.Services
             _context.Seller.Remove(obj);
             //Para confirmar a remoção no banco de dados
             _context.SaveChanges();
+        }
+
+        //Método para atualizar o seller no banco de dados
+        public void Update(Seller obj)
+        {
+            //vai verificar se o id passado já existe no banco
+            if (!_context.Seller.Any(x => x.Id == obj.Id) )//Any() Verifica se existe no banco de dados, foi passado id no parâmetro
+            {
+                //Vai lançar uma excessão
+                throw new NotFoundException("Id não foi encontrado");
+            }
+            try { 
+            //Se passar pela condição, vai atualizar o seller
+            _context.Update(obj);
+            _context.SaveChanges();
+            }//Se acontecer alguma excessão (error) iremos tratar 
+            catch (DbUpdateConcurrencyException e)
+            {
+                //Vai relançar uma outra excessão
+                throw new DbConcurrencyException(e.Message);
+
+            }
         }
     }
 }

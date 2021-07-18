@@ -9,6 +9,7 @@ using SalesWeb.Data;
 using SalesWeb.Models;
 using SalesWeb.Models.ViewModels;
 using SalesWeb.Services;
+using SalesWeb.Services.Exception;
 
 namespace SalesWeb.Controllers
 {
@@ -83,7 +84,7 @@ namespace SalesWeb.Controllers
         }
 
         //Método para mostrar os detalhes do seller 
-        public IActionResult Details(int id)
+        public IActionResult Details(int? id)
         {
             //Vai verificar se od é null
             if(id == null)
@@ -91,13 +92,59 @@ namespace SalesWeb.Controllers
                 return NotFound();
             }
             //Vai buscar o seller no banco de dados de acordo com id passado
-            var obj = _sellerService.FindById(id);
+            var obj = _sellerService.FindById(id.Value);
             if(obj == null)
             {
                 return NotFound();
             }
             //Vai retonar uma página com os detalhes do seller
             return View(obj);
+        }
+        //Método para interação do usuário para tela de edição
+        public IActionResult Edit(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            //Vai buscar o vendedor pelo id passado
+            var obj = _sellerService.FindById(id.Value);
+            if (obj == null)
+            {
+                return NotFound();
+            }
+            //Vai carregar a lista de departamento para aparecer na tela 
+            List<Department> departments = _departmentService.FindAll();
+            //Vai criar um objeto de tipo SellerViewModel > formulário com os dados do seller e departamento
+            SellerFormViewModel viewModel = new SellerFormViewModel { Seller = obj, Departments = departments };
+            //Vai retonar a view passando o viewModel
+            return View(viewModel);
+        }
+        //Método de edição do seller 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit(int id ,Seller seller)
+        {
+            //Vai verificar se o id que foi passado pela url da requisição vai ser o mesmo id do Seller
+            if(id != seller.Id)
+            {
+                return BadRequest();
+            }
+            try
+            {
+                _sellerService.Update(seller);
+                return RedirectToAction(nameof(Index));
+            }
+            catch (NotFoundException)
+            {
+
+                return NotFound();
+            }
+            catch (DbConcurrencyException)
+            {
+                return BadRequest();
+            }
+
         }
 
 
