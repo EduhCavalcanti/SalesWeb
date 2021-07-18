@@ -82,6 +82,23 @@ namespace SalesWeb.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        //Método para mostrar os detalhes do seller 
+        public IActionResult Details(int id)
+        {
+            //Vai verificar se od é null
+            if(id == null)
+            {
+                return NotFound();
+            }
+            //Vai buscar o seller no banco de dados de acordo com id passado
+            var obj = _sellerService.FindById(id);
+            if(obj == null)
+            {
+                return NotFound();
+            }
+            //Vai retonar uma página com os detalhes do seller
+            return View(obj);
+        }
 
 
 

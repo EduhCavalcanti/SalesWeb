@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using SalesWeb.Data;
 using SalesWeb.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace SalesWeb.Services
 {
@@ -38,7 +39,8 @@ namespace SalesWeb.Services
         public Seller FindById(int id)
         {
             // Se tiver um id válido vai retornar o Id do Seller
-            return _context.Seller.FirstOrDefault(obj => obj.Id == id);
+            //Para incluir o departamento junto tem que colocar o include >Válido para a página de detalhes
+            return _context.Seller.Include(obj => obj.Department).FirstOrDefault(obj => obj.Id == id);
         }
 
         //Método para remover o vendendor 
