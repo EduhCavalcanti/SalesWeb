@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq; //para usar where
 
 //Classe vendedor 
@@ -9,8 +10,18 @@ namespace SalesWeb.Models
     {
         public int Id { get; set; }
         public string Name { get; set; }
+
+        [DataType(DataType.EmailAddress)] //Vai colocar como tipo Email
         public string Email { get; set; }
+
+        [Display(Name = "Birth Date")]//Vai aparece no front da aplicaçãom com o espaço
+        [DataType(DataType.Date)]//Vai ficar apenas com a data, tirando as horas que estavam antes
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime BirthDate { get; set; }
+
+        [Display(Name = "Base Salary")]
+        [DisplayFormat(DataFormatString = "{0:F2}")] //Vai aparecer com duas casas decimais 
+        [DataType(DataType.Currency)] //Vai colocar como tipo moeda
         public double BaseSalary { get; set; }
 
         //Fazendo associação de vendedores(Saller) possui 1 Departament(Departments)
