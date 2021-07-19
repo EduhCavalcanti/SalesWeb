@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -60,7 +61,8 @@ namespace SalesWeb.Controllers
             //Primeiro vai verificar se o id é null
             if(id == null)
             {
-                return NotFound();
+                //Tratamento de error
+                return RedirectToAction(nameof(Error), new { message = "Id é null (Não foi fornecido)" });
             }
             //Vai buscar o seller no bannco de dados de acordo com id que foi fornecido
             var obj = _sellerService.FindById(id.Value);//Tem que colocar o "Value" pq ele é um nullable
@@ -68,7 +70,7 @@ namespace SalesWeb.Controllers
             //Pode retornar null, se for null
             if(obj == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { message = "Id não encontrado" });
             }
             //Se não for null vai passar um view passando o obj como argumeto
             return View(obj);
@@ -89,13 +91,13 @@ namespace SalesWeb.Controllers
             //Vai verificar se od é null
             if(id == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { message = "Id é null (Não foi fornecido)" });
             }
             //Vai buscar o seller no banco de dados de acordo com id passado
             var obj = _sellerService.FindById(id.Value);
             if(obj == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { message = "Id não encontrado" });
             }
             //Vai retonar uma página com os detalhes do seller
             return View(obj);
@@ -105,13 +107,15 @@ namespace SalesWeb.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { message = "Id é null (Não foi encontrado)" });
+
             }
             //Vai buscar o vendedor pelo id passado
             var obj = _sellerService.FindById(id.Value);
             if (obj == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { message = "Id não encontrado" });
+
             }
             //Vai carregar a lista de departamento para aparecer na tela 
             List<Department> departments = _departmentService.FindAll();
@@ -128,23 +132,38 @@ namespace SalesWeb.Controllers
             //Vai verificar se o id que foi passado pela url da requisição vai ser o mesmo id do Seller
             if(id != seller.Id)
             {
-                return BadRequest();
+                return RedirectToAction(nameof(Error), new { message = "Id não corresponde" });
+
             }
             try
             {
                 _sellerService.Update(seller);
                 return RedirectToAction(nameof(Index));
             }
-            catch (NotFoundException)
+            catch (NotFoundException e)
             {
 
-                return NotFound();
-            }
-            catch (DbConcurrencyException)
-            {
-                return BadRequest();
-            }
+                return RedirectToAction(nameof(Error), new { message = e.Message });
 
+            }
+            catch (DbConcurrencyException e)
+            {
+                return RedirectToAction(nameof(Error), new { message = e.Message });
+
+            }
+        }
+
+        //Método para retornar a view de error
+        public IActionResult Error(string message)
+        {
+            //Instanciar o viewModel
+            var viewModel = new ErrorViewModel
+            { //Atributo Message vai receber o message como argumento
+                Message = message,
+                // RequestId vai receber o id da requisição // Se for null vai pegar no lugar o HttpContext.TraceIdentifier
+                RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier
+            };
+            return View(viewModel);
         }
 
 
