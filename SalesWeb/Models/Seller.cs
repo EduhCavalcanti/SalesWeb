@@ -9,8 +9,13 @@ namespace SalesWeb.Models
     public class Seller
     {
         public int Id { get; set; }
+
+        [Required(ErrorMessage ="Necessário Nome para prosseguir")]
+        [StringLength(60, MinimumLength =5, ErrorMessage ="Tamanho do nome tem que ter de 5 a 60 caracteres")]
         public string Name { get; set; }
 
+        [Required(ErrorMessage ="Necessário Email para prosseguir")]
+        [EmailAddress(ErrorMessage ="Necessário email válido")]
         [DataType(DataType.EmailAddress)] //Vai colocar como tipo Email
         public string Email { get; set; }
 
