@@ -13,7 +13,7 @@ namespace SalesWeb.Models
         [Required(ErrorMessage ="Necessário Nome para prosseguir")]
         [StringLength(60, MinimumLength =5, ErrorMessage ="Tamanho do nome tem que ter de 5 a 60 caracteres")]
         public string Name { get; set; }
-
+        //para validação, utilizar no front asp-validation
         [Required(ErrorMessage ="Necessário Email para prosseguir")]
         [EmailAddress(ErrorMessage ="Necessário email válido")]
         [DataType(DataType.EmailAddress)] //Vai colocar como tipo Email
