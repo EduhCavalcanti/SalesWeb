@@ -47,12 +47,21 @@ namespace SalesWeb.Services
         //Método para remover o vendendor 
         public async Task Remove(int id)//Vai receber um id para remover o seller correto
         {
+            try 
+            { 
             //Vai pegar o obj(Seller) de acordo com com parametro 
             var obj = await _context.Seller.FindAsync(id);
             //Com obj na mão,vamos remover o seller pelo id que foi informado no parâmetro acima
             _context.Seller.Remove(obj);
             //Para confirmar a remoção no banco de dados
             await _context.SaveChangesAsync();
+            }
+            //Se não conseguir excluir 
+            catch(DbUpdateException e)
+            {
+                //Vai lançar a excessão em nivel de serviço
+                throw new IntegrityException("Não é possível excluir vendedor(a)");
+            }
         }
 
         //Método para atualizar o seller no banco de dados
