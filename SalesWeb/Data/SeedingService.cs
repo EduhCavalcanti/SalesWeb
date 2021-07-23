@@ -1,5 +1,7 @@
 using System;
 using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using SalesWeb.Models;
 using SalesWeb.Models.Enums;
 
@@ -18,12 +20,12 @@ namespace SalesWeb.Data
         }
 
         //Método responsável por popular a banco de dados
-        public void Seed()
+        public async Task Seed()
         {
             //Condição para verificar se existe algum dado no banco de dados
-            if (_context.Department.Any() || //Any() verifica se existe algo.
-                _context.Seller.Any() ||
-                _context.SalesRecord.Any())
+            if (await _context.Department.AnyAsync() || //Any() verifica se existe algo.
+                await _context.Seller.AnyAsync() ||
+                await _context.SalesRecord.AnyAsync())
             {
                 return; //O banco de dados já foi populado! (Se existir algum dado ele não vai retornar nada)
             }
@@ -50,12 +52,12 @@ namespace SalesWeb.Data
                 SalesRecord a7 = new SalesRecord(7, new DateTime(2020, 8, 21), 4.000, SaleStatus.Canceled, s1);
 
                 //Realizando a inclusão no banco de dados
-                _context.Department.AddRange(d1,d2,d3,d4); //Método utilizado para incluir varios dados de uma vez no banco
-                _context.Seller.AddRange(s1, s2, s3, s4, s5);
-                _context.SalesRecord.AddRange(a1, a2, a3, a4, a5, a6, a7);
+                await _context.Department.AddRangeAsync(d1,d2,d3,d4); //Método utilizado para incluir varios dados de uma vez no banco
+                await _context.Seller.AddRangeAsync(s1, s2, s3, s4, s5);
+                await _context.SalesRecord.AddRangeAsync(a1, a2, a3, a4, a5, a6, a7);
 
                 //Vai salvar e confirmar as alterações no banco de dados
-                _context.SaveChanges(); 
+                await _context.SaveChangesAsync(); 
             }
         }
     }

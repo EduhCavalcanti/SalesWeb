@@ -29,17 +29,17 @@ namespace SalesWeb.Controllers
         }
 
         //Método Index que vai chamar a operação FindAll da pasta Services
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             //Vai retornar uma lista de Seller
-            var lista = _sellerService.FindAll();
+            var lista = await _sellerService.FindAll();
             return View(lista);//Vai retornar o resultado da lista pela view no Html
         }
         
         //Método que vai abri o formulário pra cadastrar o vendedor
-        public IActionResult Create() {
+        public async Task<IActionResult> Create() {
             //Vai buscar do banco de dados todos os departamentos
-            var departaments = _departmentService.FindAll();
+            var departaments = await _departmentService.FindAll();
             //Vai instanciar o obj do viewModel
             var viewModel = new SellerFormViewModel { Departments = departaments };//Já vai iniciar com a lista de departamentos    
             return View(viewModel);//Vai receber a viewModel
@@ -48,15 +48,15 @@ namespace SalesWeb.Controllers
         [HttpPost]//Método POST para criar 
         [ValidateAntiForgeryToken]//Evita de ter ataques DDOs
         //Método create, vai criar um vendedor 
-        public IActionResult Create(Seller seller) 
+        public async Task<IActionResult> Create(Seller seller) 
         {
             //Usou o método criado no serviceSaller para inserir um vendedor novo no banco
-            _sellerService.Insert(seller);
+            await _sellerService.Insert(seller);
             return RedirectToAction(nameof(Index)); //Vai redirecionar para a página Index quando for criado
         }
 
         //Método de confirmação do Delete no front
-        public IActionResult Delete(int? id)//Vai receber um parâmetro opcional 
+        public async Task<IActionResult> Delete(int? id)//Vai receber um parâmetro opcional 
         {
             //Primeiro vai verificar se o id é null
             if(id == null)
@@ -65,7 +65,7 @@ namespace SalesWeb.Controllers
                 return RedirectToAction(nameof(Error), new { message = "Id é null (Não foi fornecido)" });
             }
             //Vai buscar o seller no bannco de dados de acordo com id que foi fornecido
-            var obj = _sellerService.FindById(id.Value);//Tem que colocar o "Value" pq ele é um nullable
+            var obj = await _sellerService.FindById(id.Value);//Tem que colocar o "Value" pq ele é um nullable
 
             //Pode retornar null, se for null
             if(obj == null)
@@ -79,14 +79,14 @@ namespace SalesWeb.Controllers
         //Método para delete do seller de fato
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult delete(int id)
+        public async Task<IActionResult> delete(int id)
         {
-            _sellerService.Remove(id);
+            await _sellerService.Remove(id);
             return RedirectToAction(nameof(Index));
         }
 
         //Método para mostrar os detalhes do seller 
-        public IActionResult Details(int? id)
+        public async Task<IActionResult> Details(int? id)
         {
             //Vai verificar se od é null
             if(id == null)
@@ -94,7 +94,7 @@ namespace SalesWeb.Controllers
                 return RedirectToAction(nameof(Error), new { message = "Id é null (Não foi fornecido)" });
             }
             //Vai buscar o seller no banco de dados de acordo com id passado
-            var obj = _sellerService.FindById(id.Value);
+            var obj = await _sellerService.FindById(id.Value);
             if(obj == null)
             {
                 return RedirectToAction(nameof(Error), new { message = "Id não encontrado" });
@@ -103,7 +103,7 @@ namespace SalesWeb.Controllers
             return View(obj);
         }
         //Método para interação do usuário para tela de edição
-        public IActionResult Edit(int? id)
+        public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
             {
@@ -111,14 +111,14 @@ namespace SalesWeb.Controllers
 
             }
             //Vai buscar o vendedor pelo id passado
-            var obj = _sellerService.FindById(id.Value);
+            var obj = await _sellerService.FindById(id.Value);
             if (obj == null)
             {
                 return RedirectToAction(nameof(Error), new { message = "Id não encontrado" });
 
             }
             //Vai carregar a lista de departamento para aparecer na tela 
-            List<Department> departments = _departmentService.FindAll();
+            List<Department> departments = await _departmentService.FindAll();
             //Vai criar um objeto de tipo SellerViewModel > formulário com os dados do seller e departamento
             SellerFormViewModel viewModel = new SellerFormViewModel { Seller = obj, Departments = departments };
             //Vai retonar a view passando o viewModel
@@ -127,7 +127,7 @@ namespace SalesWeb.Controllers
         //Método de edição do seller 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(int id ,Seller seller)
+        public async Task<IActionResult> Edit(int id ,Seller seller)
         {
             //Vai verificar se o id que foi passado pela url da requisição vai ser o mesmo id do Seller
             if(id != seller.Id)
@@ -137,7 +137,7 @@ namespace SalesWeb.Controllers
             }
             try
             {
-                _sellerService.Update(seller);
+                await _sellerService.Update(seller);
                 return RedirectToAction(nameof(Index));
             }
             catch (NotFoundException e)

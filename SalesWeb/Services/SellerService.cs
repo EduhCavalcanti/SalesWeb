@@ -21,45 +21,46 @@ namespace SalesWeb.Services
         }
 
         //Método para retornar a lista com todos o vendedores
-        public List<Seller> FindAll()
+        public async Task<List<Seller>> FindAll()
         {
             //Vai acessar a fonte de dados relacionado a tabela de vendedores
-            return _context.Seller.ToList();//E vai converter para uma lista => ToList()
+            return await _context.Seller.ToListAsync();//E vai converter para uma lista => ToList()
         }
 
         //Método que vai inserir um novo vendedor no banco de dados
-        public void Insert (Seller obj)
+        public async Task Insert (Seller obj)
         {
             //Vai inserir esse obj no banco de dados
             //obj.Department = _context.Department.First();//(Provisório) Vai pegar o primeiro departamento para incluir no DepartmentId
             _context.Add(obj);
-            _context.SaveChanges();//Para confirmar a criação no banco de dados
+            await _context.SaveChangesAsync();//Para confirmar a criação no banco de dados
         }
 
         //Método que vai procurar por id
-        public Seller FindById(int id)
+        public async Task<Seller> FindById(int id)
         {
             // Se tiver um id válido vai retornar o Id do Seller
             //Para incluir o departamento junto tem que colocar o include >Válido para a página de detalhes
-            return _context.Seller.Include(obj => obj.Department).FirstOrDefault(obj => obj.Id == id);
+            return await _context.Seller.Include(obj => obj.Department).FirstOrDefaultAsync(obj => obj.Id == id);
         }
 
         //Método para remover o vendendor 
-        public void Remove(int id)//Vai receber um id para remover o seller correto
+        public async Task Remove(int id)//Vai receber um id para remover o seller correto
         {
             //Vai pegar o obj(Seller) de acordo com com parametro 
-            var obj = _context.Seller.Find(id);
+            var obj = await _context.Seller.FindAsync(id);
             //Com obj na mão,vamos remover o seller pelo id que foi informado no parâmetro acima
             _context.Seller.Remove(obj);
             //Para confirmar a remoção no banco de dados
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
         //Método para atualizar o seller no banco de dados
-        public void Update(Seller obj)
+        public async Task Update(Seller obj)
         {
             //vai verificar se o id passado já existe no banco
-            if (!_context.Seller.Any(x => x.Id == obj.Id) )//Any() Verifica se existe no banco de dados, foi passado id no parâmetro
+            bool hasAny = await _context.Seller.AnyAsync(x => x.Id == obj.Id);
+            if (!hasAny)// Verifica se existe no banco de dados, foi passado id no parâmetro
             {
                 //Vai lançar uma excessão
                 throw new NotFoundException("Id não foi encontrado");
@@ -67,7 +68,7 @@ namespace SalesWeb.Services
             try { 
             //Se passar pela condição, vai atualizar o seller
             _context.Update(obj);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             }//Se acontecer alguma excessão (error) iremos tratar 
             catch (DbUpdateConcurrencyException e)
             {
