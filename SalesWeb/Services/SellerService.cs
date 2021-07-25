@@ -57,7 +57,7 @@ namespace SalesWeb.Services
             await _context.SaveChangesAsync();
             }
             //Se não conseguir excluir 
-            catch(DbUpdateException e)
+            catch(DbUpdateException)
             {
                 //Vai lançar a excessão em nivel de serviço
                 throw new IntegrityException("Não é possível excluir vendedor(a)");
