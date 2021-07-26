@@ -40,5 +40,28 @@ namespace SalesWeb.Services
                 .OrderByDescending(x => x.Date)// Vai retornar em ordem descrescente
                 .ToListAsync(); //Retornar como lista
         }
+        //Método de busca agrupada 
+        public async Task<List< IGrouping<Department, SalesRecord> >> FindByDateGrouping(DateTime? minDate, DateTime? maxDate)
+        {
+            //Vai construir um objeto para fazer consulta pelo DdContex
+            var result = from obj in _context.SalesRecord select obj;
+
+            //Se tiver uma data vai fazer consulta passando a logica da data
+            if (minDate.HasValue)
+            {
+                result = result.Where(x => x.Date >= minDate.Value);
+            }
+            if (maxDate.HasValue)
+            {
+                result = result.Where(x => x.Date <= maxDate.Value);
+            }
+            //Vai retornar a consultado com os Joins necessários
+            return await result
+                .Include(x => x.Seller)//Vai incluir os Sellers
+                .Include(x => x.Seller.Department)//Vai incluir os Departaments
+                .OrderByDescending(x => x.Date)// Vai retornar em ordem descrescente
+                .GroupBy(x => x.Seller.Department)//Vai agrupar por departamento
+                .ToListAsync(); //Retornar como lista
+        }
     }
 }
